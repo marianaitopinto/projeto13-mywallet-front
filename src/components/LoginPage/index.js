@@ -1,19 +1,42 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { useState, useContext } from "react";
+import axios from "axios";
+import { Oval } from "react-loader-spinner";
+
+import UserContext from "../../context/UserContext";
 import logo from "../../assets/logo.png";
-//import { Oval } from "react-loader-spinner";
 
 export default function LoginPage() {
     const navigate = useNavigate();
+    const [userData, setUserData] = useState({ usermail: "", password: "" });
+    const [loading, setLoading] = useState(false);
+    const {setToken} = useContext(UserContext);
+    console.log(userData);
+    console.log(loading);
+
+    function Login(e) {
+        e.preventDefault();
+        setLoading(true);
+        const promise = axios.post(`http://localhost:5000/login`, userData);
+        promise.then((res) => {
+            setToken(res.data.token);
+            console.log('funcionou');
+        })
+        promise.catch(() => {
+            alert("Usuário ou senha incorretos");
+            setLoading(false);
+        });
+    }
 
     return (
         <>
             <BodyCss>
                 <img src={logo} alt="logo" />
-                <Form>
-                    <input placeholder="   E-mail" type='text' required></input>
-                    <input placeholder="   Senha" type='password' required></input>
-                    <button type="submit">Entrar</button>
+                <Form onSubmit={Login}>
+                    <input placeholder="   E-mail" type='text' disabled={loading} onChange={(e) => setUserData({ ...userData, usermail: e.target.value })} value={userData.usermail} required></input>
+                    <input placeholder="   Senha" type='password' onChange={(e) => setUserData({ ...userData, password: e.target.value })} value={userData.password} required></input>
+                    <button type="submit">{loading ?  <Oval color="#FFFFFF" height={30} width={30} /> : `Entrar`}</button>
                 </Form>
                 <p onClick={() => navigate("/register")}>Primeira vez? Cadastre-se!</p>
             </BodyCss>
