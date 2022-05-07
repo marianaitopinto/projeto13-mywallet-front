@@ -22,6 +22,8 @@ export default function LoginPage() {
         promise.then((res) => {
             setToken(res.data.token);
             console.log('funcionou');
+            navigate('/resume');
+
         })
         promise.catch(() => {
             alert("Usuário ou senha incorretos");
