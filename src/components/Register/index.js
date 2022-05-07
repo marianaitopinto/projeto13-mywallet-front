@@ -1,20 +1,42 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useState } from "react";
+import { Oval } from "react-loader-spinner";
+
 import logo from "../../assets/logo.png";
+
 
 export default function Register() {
     const navigate = useNavigate();
-    
+    const [data, setData] =  useState({ name: '', usermail: '', password: ''})
+    const [loading, setLoading] = useState(false);
+    console.log(data);
+
+    function register(e) {
+        e.preventDefault();
+        setLoading(true);
+        const promise = axios.post(`http://localhost:5000/register`, data);
+        promise.then((res) => {
+            console.log('funcionou');
+            navigate('/');
+        });
+        promise.catch(() => {
+            alert("Algo deu errado, revise os dados!");
+            setLoading(false);
+        });
+    }
+
     return (
         <>
             <BodyCss>
                 <img src={logo} alt="logo" />
-                <Form >
-                    <input placeholder="   Nome" type='text' required></input>
-                    <input placeholder="   E-mail" type='email' required></input>
-                    <input placeholder="   Senha" type='password' required></input>
-                    <input placeholder="   Confirme a senha" type='password' required></input>
-                    <button type="submit"> Cadastrar</button>
+                <Form onSubmit={register}>
+                    <input placeholder="   Nome" type='text' disabled={loading} onChange={(e) => setData({ ...data, name: e.target.value })} value={data.name} required></input>
+                    <input placeholder="   E-mail" type='email' disabled={loading} onChange={(e) => setData({ ...data, usermail: e.target.value })} value={data.usermail} required></input>
+                    <input placeholder="   Senha" type='password' disabled={loading} onChange={(e) => setData({ ...data, password: e.target.value })} value={data.password} required></input>
+                    <input placeholder="   Confirme a senha" type='password' disabled={loading} required></input>    
+                    <button type="submit" disabled={loading}> {loading ?  <Oval color="#FFFFFF" height={30} width={30} /> : `Cadastrar`}</button>
                 </Form>
                 <p onClick={() => navigate("/")}>Já tem uma conta? Entre agora!</p>
             </BodyCss>
