@@ -14,7 +14,11 @@ export default function Resume() {
     console.log(token)
     const [total, setTotal] = useState(0);
 
-    useEffect(() => {
+    useEffect(renderTransactions, []);
+
+    useEffect(sum, [movements]);
+
+    function renderTransactions() {
         const config = {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -28,11 +32,7 @@ export default function Resume() {
         promise.catch(() => {
             alert("Erro ao buscar movimentações");
         });
-    }, []);
-
-    useEffect(sum, [movements]);
-
-    console.log(total);
+    }
 
     function sum() {
         const entries = movements.filter((e) => e.type === 'entry');
@@ -41,23 +41,41 @@ export default function Resume() {
         let sumOuts = 0;
 
         entries.forEach(element => {
-            sumEntries += parseFloat(element.value);   
-            console.log(sumEntries)         
+            sumEntries += parseFloat(element.value);
+            console.log(sumEntries)
         });
 
         out.forEach(element => {
-            sumOuts += parseFloat(element.value);            
+            sumOuts += parseFloat(element.value);
         });
 
         sum = (sumEntries - sumOuts).toFixed(2).replace('.', ',');
         console.log(total);
         setTotal(sum)
     }
-    console.log(total)
- 
+
     if (!token) {
         navigate('/');
     }
+
+    function deleteMovement(id, token) {
+        if (window.confirm('Deseja mesmo apagar o registro?')) {
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            };
+            const promise = axios.delete(`http://localhost:5000/transactions/${id}`, config);
+            promise.then(res => {
+                console.log('deletou');
+                renderTransactions();
+            })
+            promise.catch(() => {
+                alert("Erro ao deletar movimentação");
+            });
+        }
+    }
+
 
     return (
         <BodyCss>
@@ -74,10 +92,11 @@ export default function Resume() {
                             <>
                                 <MovementsContainer>
                                     <div>
-                                    <p className='date'>{movement.date}</p>
-                                    <p className='description'>{movement.description}</p>
+                                        <p className='date'>{movement.date}</p>
+                                        <p className='description'>{movement.description}</p>
                                     </div>
                                     <p className={movement.type === 'entry' ? 'green' : 'red'}>{movement.value}</p>
+                                    <span className='date' onClick={async () => await deleteMovement(movement._id, token)}>x</span>
                                 </MovementsContainer>
                             </>
                         )
