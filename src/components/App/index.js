@@ -4,6 +4,7 @@ import UserContext from '../../context/UserContext';
 import LoginPage from "../LoginPage";
 import Register from "../Register";
 import Resume from "../Resume";
+import NewEntry from "../NewEntry";
 
 
 import { GlobalStyle } from "../App/style.js"
@@ -21,6 +22,7 @@ export default function App() {
                         <Route path="/" element={<LoginPage />} />
                         <Route path="/register" element={<Register />} />
                         <Route path="/resume" element={<Resume />} />
+                        <Route path="/newentry" element={<NewEntry />} />
                     </Routes>
                 </BrowserRouter>
             </UserContext.Provider>

@@ -1,6 +1,7 @@
 import styled from "styled-components";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 
 import UserContext from "../../context/UserContext";
@@ -8,7 +9,40 @@ import logout from "../../assets/logout.png";
 
 export default function Resume() {
     const navigate = useNavigate();
-    const {token, user} = useContext(UserContext);
+    const { token, user } = useContext(UserContext);
+    const [movements, setMovements] = useState([]);
+
+    /*useEffect(() => {
+        getMovements(token)
+    }, [])
+
+    function getMovements() {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${user.token}`,
+            },
+        };
+        const promise = axios.get(`http://localhost:5000/resume`, config);
+        promise.then((res) => {
+            setMovements(res.data);
+        }).catch(() => {
+            alert("Erro ao buscar movimentações");
+        });
+    }
+    
+    {movements.length === 0 ?
+<p>Não há registros de entrada ou saída</p>
+:
+movements.map((movement) => {
+return (
+<>
+<p>movement.description</p>
+<p>movement.value</p>
+</>
+)
+})
+}
+*/
 
     if (!token) {
         navigate('/');
@@ -24,7 +58,7 @@ export default function Resume() {
                 <p>Não há registros de entrada ou saída</p>
             </Container>
             <Buttons>
-                <button>Nova entrada</button>
+                <button onClick={() => navigate("/newentry")}>Nova entrada</button>
                 <button>Nova saída</button>
             </Buttons>
         </BodyCss>
