@@ -11,38 +11,23 @@ export default function Resume() {
     const navigate = useNavigate();
     const { token, user } = useContext(UserContext);
     const [movements, setMovements] = useState([]);
-
-    /*useEffect(() => {
-        getMovements(token)
-    }, [])
-
-    function getMovements() {
+    console.log(token)
+    
+    useEffect(() => {
         const config = {
             headers: {
-                Authorization: `Bearer ${user.token}`,
+                Authorization: `Bearer ${token}`,
             },
         };
-        const promise = axios.get(`http://localhost:5000/resume`, config);
-        promise.then((res) => {
+        const promise = axios.get(`http://localhost:5000/transactions`, config);
+        promise.then(res => {
+            console.log(res.data)
             setMovements(res.data);
-        }).catch(() => {
+        })
+        promise.catch(() => {
             alert("Erro ao buscar movimentações");
         });
-    }
-    
-    {movements.length === 0 ?
-<p>Não há registros de entrada ou saída</p>
-:
-movements.map((movement) => {
-return (
-<>
-<p>movement.description</p>
-<p>movement.value</p>
-</>
-)
-})
-}
-*/
+    }, []);
 
     if (!token) {
         navigate('/');
@@ -55,11 +40,22 @@ return (
                 <img src={logout} alt="Logout icon"></img>
             </Header>
             <Container>
-                <p>Não há registros de entrada ou saída</p>
+                {movements.length === 0 ?
+                    <p>Não há registros de entrada ou saída</p>
+                    :
+                    movements.map((movement) => {
+                        return (
+                            <>
+                                <p>movement.description</p>
+                                <p>movement.value</p>
+                            </>
+                        )
+                    })
+                }
             </Container>
             <Buttons>
                 <button onClick={() => navigate("/newentry")}>Nova entrada</button>
-                <button>Nova saída</button>
+                <button onClick={() => navigate("/newout")}>Nova saída</button>
             </Buttons>
         </BodyCss>
     )

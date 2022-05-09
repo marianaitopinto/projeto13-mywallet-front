@@ -14,10 +14,18 @@ export default function NewEntry() {
     const [newEntry, setNewEntry] = useState({ value: '', description: '', type: 'entry' });
 
     function Entry(e) {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        };
+        console.log(config)
         e.preventDefault();
         setLoading(true);
-        const promise = axios.post(`http://localhost:5000/create`, newEntry);
+        console.log(newEntry);
+        const promise = axios.post(`http://localhost:5000/transactions`, newEntry, config);
         promise.then(() => {
+            console.log('chegou aqui2')
             setLoading(false);
             navigate('/resume');
         })
@@ -26,6 +34,7 @@ export default function NewEntry() {
             setLoading(false);
         });
     }
+    console.log(newEntry);
 
     return (
         <BodyCss>
@@ -34,7 +43,7 @@ export default function NewEntry() {
             </Header>
             <Form onSubmit={Entry}>
                 <input placeholder="   Valor" type='text' disabled={loading} onChange={(e) => setNewEntry({ ...newEntry, value: e.target.value })} value={newEntry.value} required></input>
-                <input placeholder="   Descrição" type='text' disabled={loading} onChange={(e) => setNewEntry({ ...newEntry, description: e.target.description })} value={newEntry.description} required></input>
+                <input placeholder="   Descrição" type='text' disabled={loading} onChange={(e) => setNewEntry({ ...newEntry, description: e.target.value })} value={newEntry.description} required></input>
                 <button>{loading ? <Oval color="#FFFFFF" height={30} width={30} /> : `Salvar entrada`}</button>
             </Form>
         </BodyCss>
