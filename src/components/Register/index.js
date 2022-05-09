@@ -11,18 +11,24 @@ export default function Register() {
     const navigate = useNavigate();
     const [data, setData] =  useState({ name: '', usermail: '', password: ''})
     const [loading, setLoading] = useState(false);
+    const [confirmPassword, setConfirmPassword] = useState('');
     console.log(data);
 
     function register(e) {
         e.preventDefault();
         setLoading(true);
+        if (data.password !== confirmPassword) {
+            alert('As senhas não são compatíveis. Revise os dados!')
+            setLoading(false);
+            return;
+        }
         const promise = axios.post(`http://localhost:5000/register`, data);
         promise.then((res) => {
             console.log('funcionou');
             navigate('/');
         });
         promise.catch(() => {
-            alert("Algo deu errado, revise os dados!");
+            alert("Algo deu errado, revise os dados! A senha precisa conter 6 dígitos, incluindo números e caracteres especiais.");
             setLoading(false);
         });
     }
@@ -35,7 +41,7 @@ export default function Register() {
                     <input placeholder="   Nome" type='text' disabled={loading} onChange={(e) => setData({ ...data, name: e.target.value })} value={data.name} required></input>
                     <input placeholder="   E-mail" type='email' disabled={loading} onChange={(e) => setData({ ...data, usermail: e.target.value })} value={data.usermail} required></input>
                     <input placeholder="   Senha" type='password' disabled={loading} onChange={(e) => setData({ ...data, password: e.target.value })} value={data.password} required></input>
-                    <input placeholder="   Confirme a senha" type='password' disabled={loading} required></input>    
+                    <input placeholder="   Confirme a senha" type='password' disabled={loading} onChange={(e) => setConfirmPassword( e.target.value )} value={confirmPassword} required></input>    
                     <button type="submit" disabled={loading}> {loading ?  <Oval color="#FFFFFF" height={30} width={30} /> : `Cadastrar`}</button>
                 </Form>
                 <p onClick={() => navigate("/")}>Já tem uma conta? Entre agora!</p>
