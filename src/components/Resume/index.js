@@ -1,13 +1,23 @@
 import styled from "styled-components";
+import { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 
+
+import UserContext from "../../context/UserContext";
 import logout from "../../assets/logout.png";
 
 export default function Resume() {
+    const navigate = useNavigate();
+    const {token, user} = useContext(UserContext);
+
+    if (!token) {
+        navigate('/');
+    }
 
     return (
         <BodyCss>
             <Header>
-                <h1>Olá, </h1>
+                <h1>Olá, {user}</h1>
                 <img src={logout} alt="Logout icon"></img>
             </Header>
             <Container>

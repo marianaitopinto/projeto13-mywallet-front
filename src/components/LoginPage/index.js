@@ -11,9 +11,11 @@ export default function LoginPage() {
     const navigate = useNavigate();
     const [userData, setUserData] = useState({ usermail: "", password: "" });
     const [loading, setLoading] = useState(false);
-    const {setToken} = useContext(UserContext);
+    const {token, setToken, user, setUser} = useContext(UserContext);
     console.log(userData);
     console.log(loading);
+    console.log(token);
+    console.log(user);
 
     function Login(e) {
         e.preventDefault();
@@ -21,9 +23,9 @@ export default function LoginPage() {
         const promise = axios.post(`http://localhost:5000/login`, userData);
         promise.then((res) => {
             setToken(res.data.token);
+            setUser(res.data.name);
             console.log('funcionou');
             navigate('/resume');
-
         })
         promise.catch(() => {
             alert("Usuário ou senha incorretos");
