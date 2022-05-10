@@ -22,7 +22,7 @@ export default function Register() {
             setLoading(false);
             return;
         }
-        const promise = axios.post(`http://localhost:5000/register`, data);
+        const promise = axios.post(`http://mywalletdrivenito.herokuapp.com/register`, data);
         promise.then((res) => {
             console.log('funcionou');
             navigate('/');

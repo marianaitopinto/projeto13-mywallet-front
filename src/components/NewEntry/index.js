@@ -23,7 +23,7 @@ export default function NewEntry() {
         e.preventDefault();
         setLoading(true);
         console.log(newEntry);
-        const promise = axios.post(`http://localhost:5000/transactions`, newEntry, config);
+        const promise = axios.post(`http://mywalletdrivenito.herokuapp.com/transactions`, newEntry, config);
         promise.then(() => {
             console.log('chegou aqui2')
             setLoading(false);

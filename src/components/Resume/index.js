@@ -24,7 +24,7 @@ export default function Resume() {
                 Authorization: `Bearer ${token}`,
             },
         };
-        const promise = axios.get(`http://localhost:5000/transactions`, config);
+        const promise = axios.get(`http://mywalletdrivenito.herokuapp.com/transactions`, config);
         promise.then(res => {
             console.log(res.data)
             setMovements(res.data);
@@ -65,7 +65,7 @@ export default function Resume() {
                     Authorization: `Bearer ${token}`,
                 },
             };
-            const promise = axios.delete(`http://localhost:5000/transactions/${id}`, config);
+            const promise = axios.delete(`http://mywalletdrivenito.herokuapp.com/transactions/${id}`, config);
             promise.then(res => {
                 console.log('deletou');
                 renderTransactions();

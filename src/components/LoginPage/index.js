@@ -20,7 +20,7 @@ export default function LoginPage() {
     function Login(e) {
         e.preventDefault();
         setLoading(true);
-        const promise = axios.post(`http://localhost:5000/login`, userData);
+        const promise = axios.post(`http://mywalletdrivenito.herokuapp.com/login`, userData);
         promise.then((res) => {
             setToken(res.data.token);
             setUser(res.data.name);
