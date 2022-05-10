@@ -23,7 +23,7 @@ export default function NewOut() {
         e.preventDefault();
         setLoading(true);
         console.log(newOut);
-        const promise = axios.post(`http://mywalletdrivenito.herokuapp.com/transactions`, newOut, config);
+        const promise = axios.post(`https://mywalletdrivenito.herokuapp.com/transactions`, newOut, config);
         promise.then(() => {
             console.log('chegou aqui2')
             setLoading(false);
